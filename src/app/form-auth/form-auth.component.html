@@ -8,7 +8,7 @@
     </p>
 
     <form
-        [formGroup]="formAuth"
+        [formGroup]="inputForm"
         (ngSubmit)="onSubmit()">
 
             <fieldset>
@@ -18,24 +18,24 @@
                 </label>
                 <input
                     #inputDOB
-                    formControlName="dob"
+                    formControlName="dateOfBirth"
                     placeholder="mm/dd/yyyy"
                     required />
                 <span
                     class="alert"
-                    *ngIf="formAuth.invalid && (formAuth.dirty || formAuth.touched)">
-                    <p *ngIf="formAuth?.get('dob')?.errors?.['required']">
+                    *ngIf="inputForm.invalid && (inputForm.dirty || inputForm.touched)">
+                    <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['required']">
                         Required field
                     </p>
-                    <p *ngIf="formAuth?.get('dob')?.errors?.['minlength']">
+                    <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['minlength']">
                         Minimum 10 characters
                     </p>
-                    <p *ngIf="formAuth?.get('dob')?.errors?.['maxlength']">
+                    <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['maxlength']">
                         Maximum 10 characters
                     </p>
-                    <p *ngIf="formAuth?.get('dob')?.errors?.['dateInvalid'] &&
-                        formAuth.value.dob.length === 10">
-                        Invalid date. Ex: 12/31/1993
+                    <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['dateInvalid'] &&
+                        inputForm.value.dateOfBirth.length === 10">
+                        Invalid date. E.g.: 12/31/1993
                     </p>
                 </span>
             </fieldset>
@@ -47,21 +47,21 @@
                 </label>
                 <input
                     #inputZipCode
-                    formControlName="zip"
+                    formControlName="zipCode"
                     required />
                 <div
                     class="alert"
-                    *ngIf="formAuth?.get('zip')?.invalid && (formAuth?.get('zip')?.dirty || formAuth?.get('zip')?.touched)">
-                    <p *ngIf="formAuth?.get('zip')?.errors?.['required']">
+                    *ngIf="inputForm?.get('zipCode')?.invalid && (inputForm?.get('zipCode')?.dirty || inputForm?.get('zipCode')?.touched)">
+                    <p *ngIf="inputForm?.get('zipCode')?.errors?.['required']">
                         Required field
                     </p>
-                    <p *ngIf="formAuth?.get('zip')?.errors?.['minlength']">
+                    <p *ngIf="inputForm?.get('zipCode')?.errors?.['minlength']">
                         Minimum 5 digits
                     </p>
-                    <p *ngIf="formAuth?.get('zip')?.errors?.['maxlength']">
+                    <p *ngIf="inputForm?.get('zipCode')?.errors?.['maxlength']">
                         Maximum 5 digits
                     </p>
-                    <p *ngIf="formAuth?.get('zip')?.errors?.['patternInvalid'] && formAuth.value.zip.length === 5">
+                    <p *ngIf="inputForm?.get('zipCode')?.errors?.['patternInvalid'] && inputForm.value.zipCode.length === 5">
                         Invalid input
                     </p>
                 </div>
@@ -69,7 +69,7 @@
 
             <button
                 type="submit"
-                [hidden]="formAuth.invalid" >
+                [hidden]="inputForm.invalid" >
                 Continue
             </button>
     </form>

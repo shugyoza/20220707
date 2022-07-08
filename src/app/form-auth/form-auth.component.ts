@@ -1,75 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, ValidatorFn, ValidationErrors, AbstractControl, ControlContainer } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-export class Patient {
-  dateOfBirth: string;
-  zipCode: string;
+import { FacadeService } from '../services/facade-service.service';
+import { patternValidator, dateValidator } from '../shared/functions';
 
-  constructor(dateOfBirth: string, zipCode: string) {
-    this.dateOfBirth = dateOfBirth;
-    this.zipCode = zipCode
-  }
-}
-
-export class AppointmentDetails {
-  address: string;
-  appointmentDateTime: Date;
-  appointmentType: string;
-  city: string;
-  clinicId: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  state: string;
-  zipCode: string
-
-  constructor(
-    address: string,
-    appointmentDateTime: Date = new Date(),
-    appointmentType: string,
-    city: string,
-    clinicId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    state: string,
-    zipCode: string
-  ) {
-    this.address = address;
-    this.appointmentDateTime = appointmentDateTime;
-    this.appointmentType = appointmentType;
-    this.city = city;
-    this.clinicId = clinicId;
-    this.email = email;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.state = state;
-    this.zipCode = zipCode
-  }
-}
-
-export function patternValidator(filter: RegExp): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const isValid = filter.test(control.value);
-    // if input is ok, must return null, else return the problem as an object
-    const result = isValid ? null : { patternInvalid: { value: control.value }};
-    return result;
-  }
-}
-
-export function dateValidator(cb: Function): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const parsed = cb(control.value);
-    // if input is ok, must return null, else return the problem as an object
-    const result = parsed ? null : { dateInvalid: { value: control.value }};
-    return result;
-  }
-}
-
-
+import { Patient } from 'src/app/models/Patient.model';
 @Component({
   selector: 'app-form-auth',
   templateUrl: './form-auth.component.html',
@@ -77,15 +13,15 @@ export function dateValidator(cb: Function): ValidatorFn {
 })
 export class FormAuthComponent implements OnInit {
 
-  formAuth = this.fb.group({
-    dob: [
+  inputForm = this.fb.group({
+    dateOfBirth: [
       '',
       [ Validators.required,
       Validators.minLength(10),
       Validators.maxLength(10),
-      dateValidator(Date.parse) ],
+      dateValidator() ],
     ],
-    zip: [
+    zipCode: [
       '',
       [ Validators.required,
       Validators.minLength(5),
@@ -95,10 +31,17 @@ export class FormAuthComponent implements OnInit {
   });
 
   onSubmit(): void {
-    console.log('onSubmit()', this.formAuth.value)
+    this.facadeService.findPatient(this.inputForm.value);
+    const subscription = this.facadeService.patient$.subscribe({
+      next: (patient: Patient) => this.router.navigate(['appointment']),
+      error: (err: Error) => console.error(err)
+    })
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private facadeService: FacadeService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
