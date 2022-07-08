@@ -1,12 +1,10 @@
 <main>
     <header>
         <h1>Check-in</h1>
-        <div>
-            Hi there, let's confirm it's you
-        </div>
     </header>
-    <p>
-        Enter the patient's Date of Birth and zip-code to check-in
+    <p class="sub-header">
+        Hi there, let's confirm it's you. <br>
+        Enter the patient's data to check-in.
     </p>
 
     <form
@@ -16,14 +14,14 @@
             <fieldset>
                 <label
                     for="inputDOB">
-                    *Date of Birth: mm/dd/yyyy
+                    *Date of Birth: (mm/dd/yyyy)
                 </label>
                 <input
                     #inputDOB
                     formControlName="dob"
                     placeholder="mm/dd/yyyy"
                     required />
-                <div
+                <span
                     class="alert"
                     *ngIf="formAuth.invalid && (formAuth.dirty || formAuth.touched)">
                     <p *ngIf="formAuth?.get('dob')?.errors?.['required']">
@@ -37,15 +35,15 @@
                     </p>
                     <p *ngIf="formAuth?.get('dob')?.errors?.['dateInvalid'] &&
                         formAuth.value.dob.length === 10">
-                        Invalid input. Example: 12/31/1993
+                        Invalid date. Ex: 12/31/1993
                     </p>
-                </div>
+                </span>
             </fieldset>
 
             <fieldset>
                 <label
                     for="inputZipCode">
-                    *Zip Code:
+                    *Zip Code: (5 digits)
                 </label>
                 <input
                     #inputZipCode
@@ -71,7 +69,7 @@
 
             <button
                 type="submit"
-                [hidden]="!formAuth.valid" >
+                [hidden]="formAuth.invalid" >
                 Continue
             </button>
     </form>
