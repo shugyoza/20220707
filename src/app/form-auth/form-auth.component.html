@@ -1,0 +1,79 @@
+<main>
+    <header>
+        <h1>Check-in</h1>
+        <div>
+            Hi there, let's confirm it's you
+        </div>
+    </header>
+    <p>
+        Enter the patient's Date of Birth and zip-code to check-in
+    </p>
+
+    <form
+        [formGroup]="formAuth"
+        (ngSubmit)="onSubmit()">
+
+            <fieldset>
+                <label
+                    for="inputDOB">
+                    *Date of Birth: mm/dd/yyyy
+                </label>
+                <input
+                    #inputDOB
+                    formControlName="dob"
+                    placeholder="mm/dd/yyyy"
+                    required />
+                <div
+                    class="alert"
+                    *ngIf="formAuth.invalid && (formAuth.dirty || formAuth.touched)">
+                    <p *ngIf="formAuth?.get('dob')?.errors?.['required']">
+                        Required field
+                    </p>
+                    <p *ngIf="formAuth?.get('dob')?.errors?.['minlength']">
+                        Minimum 10 characters
+                    </p>
+                    <p *ngIf="formAuth?.get('dob')?.errors?.['maxlength']">
+                        Maximum 10 characters
+                    </p>
+                    <p *ngIf="formAuth?.get('dob')?.errors?.['dateInvalid'] &&
+                        formAuth.value.dob.length === 10">
+                        Invalid input. Example: 12/31/1993
+                    </p>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <label
+                    for="inputZipCode">
+                    *Zip Code:
+                </label>
+                <input
+                    #inputZipCode
+                    formControlName="zip"
+                    required />
+                <div
+                    class="alert"
+                    *ngIf="formAuth?.get('zip')?.invalid && (formAuth?.get('zip')?.dirty || formAuth?.get('zip')?.touched)">
+                    <p *ngIf="formAuth?.get('zip')?.errors?.['required']">
+                        Required field
+                    </p>
+                    <p *ngIf="formAuth?.get('zip')?.errors?.['minlength']">
+                        Minimum 5 digits
+                    </p>
+                    <p *ngIf="formAuth?.get('zip')?.errors?.['maxlength']">
+                        Maximum 5 digits
+                    </p>
+                    <p *ngIf="formAuth?.get('zip')?.errors?.['patternInvalid'] && formAuth.value.zip.length === 5">
+                        Invalid input
+                    </p>
+                </div>
+            </fieldset>
+
+            <button
+                type="submit"
+                [hidden]="!formAuth.valid" >
+                Continue
+            </button>
+    </form>
+
+</main>
