@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { FacadeService } from 'src/app/services/facade-service.service';
+import { FacadeService } from 'src/app/services/facade.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

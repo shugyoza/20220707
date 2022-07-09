@@ -1,4 +1,4 @@
-export class AppointmentDetails {
+export class AppointmentDetail {
     address: string;
     appointmentDateTime: Date;
     appointmentType: string;
@@ -24,12 +24,13 @@ export class AppointmentDetails {
       state: string,
       zipCode: string
     ) {
-      this.address = address;
+      this.address = address; // clinic address
       this.appointmentDateTime = appointmentDateTime;
       this.appointmentType = appointmentType;
-      this.city = city;
+      this.city = city; // clinic city
       this.clinicId = clinicId;
-      this.email = email;
+
+      this.email = email; // this point forward is patient's detail
       this.firstName = firstName;
       this.lastName = lastName;
       this.phoneNumber = phoneNumber;

@@ -1,26 +1,27 @@
 <main>
     <header>
-        <h1>Title or Logo</h1>
+        <h1>Appointment Detail</h1>
         <div class="sub-header">
             Here is your visit
         </div>
     </header>
     <div>
-        Verify the details of your visit.
-        Complete consents and choose communication preferences.
+        <p>Verify the details of your visit.</p>
+        <p>Complete consents and choose communication preferences.</p>
     </div>
-    <div>
+    <div *ngIf="appointment">
         <h2>
-            Vaccination
-            Thursday, January 13, at 3:00 PM
+            {{ appointment.appointmentType }}
+            <br>
+            {{ appointment.appointmentDateTime | date : 'fullDate' }}, at {{ appointment.appointmentDateTime | date : 'mediumTime' }}
         </h2>
         <div>
             <h3>Who</h3>
-            FirstName LastName
+            {{appointment.firstName}} {{appointment.lastName}}
         </div>
         <div>
             <h3>Where</h3>
-            Address
+            {{appointment.address}}
         </div>
         <div>
             <h3>Before you start</h3>
@@ -28,7 +29,13 @@
             and your changes won't be saved.
         </div>
     </div>
+    <div
+        *ngIf="!appointment"
+        class="alert">
+        <h3>Patient has not scheduled any appoinment.</h3>
+    </div>
     <button
+        [hidden]="!appointment"
         (click)="checkin()">
         Start check-in
     </button>
