@@ -1,15 +1,16 @@
 <main>
-    <header>
+    <app-spinner *ngIf="loading"></app-spinner>
+    <header *ngIf="!loading">
         <h1>Check-in</h1>
     </header>
-    <p class="sub-header">
+    <p *ngIf="!loading" class="sub-header">
         Hi there, let's confirm it's you. <br>
         Enter the patient's data to check-in.
     </p>
 
-    <form
+    <form *ngIf="!loading"
         [formGroup]="inputForm"
-        (ngSubmit)="onSubmit()">
+        (ngSubmit)="toggleLoading()">
 
             <fieldset>
                 <label

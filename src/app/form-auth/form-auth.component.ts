@@ -18,6 +18,7 @@ export class FormAuthComponent implements OnInit, OnDestroy {
   subscriptions$: any[] = [];
   patient!: Patient;
   appointment!: AppointmentDetail;
+  loading: boolean = false;
 
   inputForm = this.fb.group({
     dateOfBirth: [
@@ -37,8 +38,15 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     ]
   });
 
+  toggleLoading(): void {
+    this.loading = true;
+    setTimeout(() => {
+      this.onSubmit()
+    }, 1000)
+  }
 
   onSubmit(): void {
+    this.loading = false;
     const input: Checkin = this.inputForm.value;
     this.facadeService.getPatient(input);
     this.facadeService.patients$.subscribe({
