@@ -15,7 +15,6 @@ import { FormAuthComponent } from './form-auth/form-auth.component';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { AppointmentService } from './services/appointment.service';
 import { PatientService } from './services/patient.service';
-import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [
