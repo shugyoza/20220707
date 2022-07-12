@@ -23,9 +23,10 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     dateOfBirth: [
       '',
       [ Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(10),
-      dateValidator() ],
+        dateValidator() ],
+// we no longer need min max length validation since we have changed the input type="text" to type="date"
+//      Validators.minLength(10),
+//      Validators.maxLength(10),
     ],
     zipCode: [
       '',
@@ -39,6 +40,7 @@ export class FormAuthComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     const input: Checkin = this.inputForm.value;
+    console.log(input)
     this.facadeService.getPatient(input);
     this.facadeService.patients$.subscribe({
       next: (patients: Patient[]) => {
@@ -49,7 +51,28 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     })
   }
 
-/*
+  init(): void {
+    this.subscriptions$.push(this.facadeService.getPatients());
+    this.subscriptions$.push(this.facadeService.getAppointments());
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private facadeService: FacadeService,
+    private router: Router) { }
+
+  ngOnInit(): void {
+    this.init();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach((subscription$) => subscription$.unsubscribe())
+  }
+
+}
+
+
+/* We no longer need this code since we change our state management from service with observable into ngrx
   onSubmit(): void {
     const input: Checkin = this.inputForm.value;
     const observer = {
@@ -84,23 +107,3 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     this.subscriptions$.push(subscription$);
   }
 */
-
-  init(): void {
-    this.subscriptions$.push(this.facadeService.getPatients());
-    this.subscriptions$.push(this.facadeService.getAppointments());
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private facadeService: FacadeService,
-    private router: Router) { }
-
-  ngOnInit(): void {
-    this.init();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach((subscription$) => subscription$.unsubscribe())
-  }
-
-}

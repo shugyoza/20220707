@@ -12,6 +12,7 @@
         (ngSubmit)="onSubmit()">
 
             <fieldset>
+                {{inputForm.invalid | json}}
                 <label
                     for="inputDOB">
                     *Date of Birth: (mm/dd/yyyy)
@@ -20,6 +21,7 @@
                     #inputDOB
                     formControlName="dateOfBirth"
                     placeholder="mm/dd/yyyy"
+                    type="date"
                     required />
                 <span
                     class="alert"
@@ -27,6 +29,10 @@
                     <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['required']">
                         Required field
                     </p>
+                    <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['dateInvalid']">
+                        Invalid date. E.g.: 12/31/1993
+                    </p>
+                    <!-- we no longer need this validation since we changed the input type='text' into type='date'
                     <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['minlength']">
                         Minimum 10 characters
                     </p>
@@ -36,7 +42,7 @@
                     <p *ngIf="inputForm?.get('dateOfBirth')?.errors?.['dateInvalid'] &&
                         inputForm.value.dateOfBirth.length === 10">
                         Invalid date. E.g.: 12/31/1993
-                    </p>
+                    </p> -->
                 </span>
             </fieldset>
 

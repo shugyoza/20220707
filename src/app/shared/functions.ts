@@ -15,6 +15,7 @@ export function dateValidator(): ValidatorFn {
     // if input is ok, must return null, else return the problem as an object
     // Date must be in a date format that can be parsed, and it must not be in the future
     const result = parsed && parsed < Date.now() ? null : { dateInvalid: { value: control.value }};
+    console.log(parsed, result)
     return result;
   }
 }
