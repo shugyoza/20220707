@@ -5,7 +5,10 @@ import { Router } from '@angular/router';
 import { FacadeService } from '../services/facade.service';
 import { patternValidator, dateValidator } from '../shared/functions';
 
+import { AppointmentDetail } from 'src/app/models/AppointmentDetail.model';
 import { Patient } from 'src/app/models/Patient.model';
+import { Checkin } from 'src/app/models/CheckIn.model';
+
 @Component({
   selector: 'app-form-auth',
   templateUrl: './form-auth.component.html',
@@ -13,6 +16,8 @@ import { Patient } from 'src/app/models/Patient.model';
 })
 export class FormAuthComponent implements OnInit, OnDestroy {
   subscriptions$: any[] = [];
+  patient!: Patient;
+  appointment!: AppointmentDetail;
 
   inputForm = this.fb.group({
     dateOfBirth: [
@@ -31,19 +36,58 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     ]
   });
 
+
   onSubmit(): void {
-    this.facadeService.findPatient(this.inputForm.value);
-    const subscription$ = this.facadeService.patient$.subscribe({
-      next: (patient: Patient) => {
-        if (patient.appointments.length) {
-          const nextAppointmentDate = patient.appointments[0];
-          this.facadeService.getAppointmentDetail(nextAppointmentDate);
-          this.router.navigate(['appointment'])
-        }
+    const input: Checkin = this.inputForm.value;
+    this.facadeService.getPatient(input);
+    this.facadeService.patients$.subscribe({
+      next: (patients: Patient[]) => {
+        this.facadeService.getPatientAppointment(patients[0].email);
+        this.router.navigate(['appointment'])
       },
       error: (err: Error) => console.error(err)
-    });
+    })
+  }
+
+/*
+  onSubmit(): void {
+    const input: Checkin = this.inputForm.value;
+    const observer = {
+      next: (patients: Patient[]) => {
+        patients.find((patient) => {
+          if (patient.dateOfBirth === input.dateOfBirth && patient.zipCode === input.zipCode) {
+            this.patient = patient;
+            if (this.patient.appointments.length) {
+              const nextAppointmentDate = this.patient.appointments[0];
+              this.getAppointmentDetail(nextAppointmentDate);
+              this.router.navigate(['appointment'])
+            }
+          }
+        })
+      },
+      error: (err: Error) => console.error(err),
+      complete: () => console.log('findPatient() completed')
+    };
+    const subscription$ = this.facadeService.patients$.subscribe(observer);
     this.subscriptions$.push(subscription$);
+  }
+
+  getAppointmentDetail(appointmentDateTime: Date): void {
+    const observer = {
+      next: (appointments: AppointmentDetail[]) => {
+        appointments.find((appointment: AppointmentDetail) => appointment.appointmentDateTime === appointmentDateTime)
+      },
+      error: (err: Error) => console.error(err),
+      complete: () => console.log('getAppointmentDetail() completed')
+    }
+    const subscription$ = this.facadeService.appointments$.subscribe(observer);
+    this.subscriptions$.push(subscription$);
+  }
+*/
+
+  init(): void {
+    this.subscriptions$.push(this.facadeService.getPatients());
+    this.subscriptions$.push(this.facadeService.getAppointments());
   }
 
   constructor(
@@ -51,7 +95,9 @@ export class FormAuthComponent implements OnInit, OnDestroy {
     private facadeService: FacadeService,
     private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.init();
+  }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach((subscription$) => subscription$.unsubscribe())
