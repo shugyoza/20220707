@@ -15,12 +15,14 @@ import { FormAuthComponent } from './form-auth/form-auth.component';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { AppointmentService } from './services/appointment.service';
 import { PatientService } from './services/patient.service';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormAuthComponent,
-    AppointmentComponent
+    AppointmentComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

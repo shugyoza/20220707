@@ -40,7 +40,6 @@ export class FormAuthComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     const input: Checkin = this.inputForm.value;
-    console.log(input)
     this.facadeService.getPatient(input);
     this.facadeService.patients$.subscribe({
       next: (patients: Patient[]) => {
